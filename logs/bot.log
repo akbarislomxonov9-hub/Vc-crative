@@ -1,0 +1,117 @@
+2026-09-07 15:31:11 | INFO     | instabot | Bot ishga tushmoqda...
+2026-09-07 15:31:11 | INFO     | instabot | Soatlik avtomatik xabar tizimi ishga tushdi.
+2026-09-07 15:32:08 | INFO     | instabot | Bot ishga tushmoqda...
+2026-09-07 15:32:08 | INFO     | instabot | Soatlik avtomatik xabar tizimi ishga tushdi.
+2026-09-07 15:32:32 | INFO     | instabot | Foydalanuvchi 7033912501 /start bosdi
+2026-09-07 15:33:14 | INFO     | instabot | [7033912501] Musiqa qidiruvi: 'Ummon guruhi - Ohangim
+2026-09-07 15:33:16 | WARNING  | instabot | Musiqa qidirishda urinish 1/3 muvaffaqiyatsiz: Hech qanday natija topilmadi.
+2026-09-07 15:33:19 | WARNING  | instabot | Musiqa qidirishda urinish 2/3 muvaffaqiyatsiz: Hech qanday natija topilmadi.
+2026-09-07 15:33:24 | WARNING  | instabot | Musiqa qidirishda urinish 3/3 muvaffaqiyatsiz: Hech qanday natija topilmadi.
+2026-09-07 15:33:24 | ERROR    | instabot | [7033912501] Musiqa qidirishda xatolik
+Traceback (most recent call last):
+  File "C:\Users\user\Downloads\files (7)\bot.py", line 839, in process_music_query
+    title, filepath = await asyncio.to_thread(search_and_download_music, query, tmp_dir)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\concurrent\futures\thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\concurrent\futures\thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "C:\Users\user\Downloads\files (7)\music.py", line 55, in search_and_download_music
+    raise last_error
+  File "C:\Users\user\Downloads\files (7)\music.py", line 41, in search_and_download_music
+    raise ValueError("Hech qanday natija topilmadi.")
+ValueError: Hech qanday natija topilmadi.
+2026-09-07 15:35:56 | WARNING  | instabot | Ma'lumot olishda urinish 1/3 muvaffaqiyatsiz: [0;31mERROR:[0m [Instagram] DWokuFdjDbF: Requested content is not available, rate-limit reached or login required. Use --cookies, --cookies-from-browser, --username and --password, --netrc-cmd, or --netrc (instagram) to provide account credentials
+2026-09-07 15:36:19 | WARNING  | instabot | Ma'lumot olishda urinish 2/3 muvaffaqiyatsiz: [0;31mERROR:[0m [Instagram] DWokuFdjDbF: Requested content is not available, rate-limit reached or login required. Use --cookies, --cookies-from-browser, --username and --password, --netrc-cmd, or --netrc (instagram) to provide account credentials
+2026-09-07 15:36:26 | WARNING  | instabot | Ma'lumot olishda urinish 3/3 muvaffaqiyatsiz: [0;31mERROR:[0m [Instagram] DWokuFdjDbF: Requested content is not available, rate-limit reached or login required. Use --cookies, --cookies-from-browser, --username and --password, --netrc-cmd, or --netrc (instagram) to provide account credentials
+2026-09-07 15:36:26 | ERROR    | instabot | [7033912501] Ma'lumot olishda xatolik
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1626, in wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1761, in __extract_info
+    ie_result = ie.extract(url)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\site-packages\yt_dlp\extractor\common.py", line 740, in extract
+    ie_result = self._real_extract(url)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\site-packages\yt_dlp\extractor\instagram.py", line 460, in _real_extract
+    self.raise_login_required('Requested content is not available, rate-limit reached or login required')
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\site-packages\yt_dlp\extractor\common.py", line 1245, in raise_login_required
+    raise ExtractorError(msg, expected=True)
+yt_dlp.utils.ExtractorError: [Instagram] DWokuFdjDbF: Requested content is not available, rate-limit reached or login required. Use --cookies, --cookies-from-browser, --username and --password, --netrc-cmd, or --netrc (instagram) to provide account credentials
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\user\Downloads\files (7)\bot.py", line 963, in handle_text
+    info = await asyncio.to_thread(get_media_info, url)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\concurrent\futures\thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\concurrent\futures\thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "C:\Users\user\Downloads\files (7)\info.py", line 71, in get_media_info
+    raise last_error
+  File "C:\Users\user\Downloads\files (7)\info.py", line 51, in get_media_info
+    info = ydl.extract_info(url, download=False)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1615, in extract_info
+    return self.__extract_info(url, self.get_info_extractor(key), download, extra_info, process)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1644, in wrapper
+    self.report_error(str(e), e.format_traceback())
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1092, in report_error
+    self.trouble(f'{self._format_err("ERROR:", self.Styles.ERROR)} {message}', *args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1031, in trouble
+    raise DownloadError(message, exc_info)
+yt_dlp.utils.DownloadError: [0;31mERROR:[0m [Instagram] DWokuFdjDbF: Requested content is not available, rate-limit reached or login required. Use --cookies, --cookies-from-browser, --username and --password, --netrc-cmd, or --netrc (instagram) to provide account credentials
+2026-09-07 15:39:51 | ERROR    | instabot | [7033912501] Video siqishda xatolik
+Traceback (most recent call last):
+  File "C:\Users\user\Downloads\files (7)\bot.py", line 388, in handle_uploaded_video
+    await asyncio.to_thread(compress_video, raw_path, compressed_path, VIDEO_COMPRESS_CRF)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\concurrent\futures\thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\concurrent\futures\thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "C:\Users\user\Downloads\files (7)\watermark.py", line 230, in compress_video
+    result = subprocess.run(cmd, capture_output=True)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 555, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1553, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+2026-09-07 15:57:56 | INFO     | instabot | Foydalanuvchi 7033912501 /start bosdi
+2026-09-07 15:58:17 | INFO     | instabot | Foydalanuvchi 7033912501 /start bosdi
+2026-09-08 14:04:04 | INFO     | instabot | Bot ishga tushmoqda...
+2026-09-08 14:04:04 | INFO     | instabot | Soatlik avtomatik xabar tizimi ishga tushdi.
+2026-09-10 15:13:25 | INFO     | instabot | Bot ishga tushmoqda...
+2026-09-10 15:13:25 | INFO     | instabot | Soatlik avtomatik xabar tizimi ishga tushdi.
+2026-09-10 15:13:45 | INFO     | instabot | Foydalanuvchi 7033912501 /start bosdi
