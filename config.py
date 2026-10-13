@@ -7,6 +7,7 @@ import logging
 import logging.handlers
 import os
 import re
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -14,21 +15,40 @@ from dotenv import load_dotenv
 # .env FAYLIDAN O'QISH
 # ------------------------------------------------------------------
 
-load_dotenv()
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+# Fayl nomi qanday bo'lishidan qat'iy nazar topiladi: ".env" yoki "_env"
+# (Windows/brauzer ba'zan yuklab olishda nuqtani "_" ga almashtirib qo'yadi).
+# Ikkalasi ham bo'lsa — eng so'nggi o'zgartirilgani olinadi.
+BASE_DIR = Path(__file__).resolve().parent
+_env_candidates = [p for p in (BASE_DIR / ".env", BASE_DIR / "_env") if p.exists()]
+_env_candidates.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+ENV_FILE = _env_candidates[0] if _env_candidates else None
+
+_system_token = os.environ.get("BOT_TOKEN")  # tizim muhit o'zgaruvchisi (eski token bo'lishi mumkin)
+
+if ENV_FILE:
+    # override=True — fayldagi YANGI token tizimdagi ESKI qiymatdan ustun turadi
+    load_dotenv(ENV_FILE, override=True, encoding="utf-8-sig")
+
+BOT_TOKEN = (os.getenv("BOT_TOKEN") or "").strip().strip("\"'").strip()
 
 if not BOT_TOKEN:
     raise RuntimeError(
-        "BOT_TOKEN topilmadi! Loyiha papkasida .env fayl yarating:\n"
+        "BOT_TOKEN topilmadi! Bot papkasida .env fayl yarating:\n"
         "BOT_TOKEN=sizning_tokeningiz"
     )
 
+if not re.fullmatch(r"\d{6,12}:[A-Za-z0-9_-]{30,}", BOT_TOKEN):
+    raise RuntimeError(
+        "BOT_TOKEN formati noto'g'ri! To'g'ri ko'rinish: 123456789:AAH... "
+        "(bo'sh joy, tirnoq yoki qo'shimcha so'z bo'lmasin)."
+    )
+
 # .env faylida ADMIN_IDS=123456789,987654321 shaklida vergul bilan
-# ajratilgan Telegram user ID'larni yozing (broadcast buyrug'i uchun).
+# ajratilgan RAQAMLI Telegram user ID'larni yozing (@username EMAS!).
 _admin_ids_raw = os.getenv("ADMIN_IDS", "")
-ADMIN_IDS: set[int] = {
-    int(x.strip()) for x in _admin_ids_raw.split(",") if x.strip().isdigit()
-}
+_admin_parts = [x.strip() for x in _admin_ids_raw.split(",") if x.strip()]
+ADMIN_IDS: set[int] = {int(x) for x in _admin_parts if x.isdigit()}
+_BAD_ADMIN_ENTRIES = [x for x in _admin_parts if not x.isdigit()]
 
 # ------------------------------------------------------------------
 # WATERMARK SOZLAMALARI
@@ -175,3 +195,25 @@ logger.addHandler(_file_handler)
 
 # aiogram'ning ortiqcha "debug" xabarlarini kamaytiramiz
 logging.getLogger("aiogram").setLevel(logging.WARNING)
+
+# ------------------------------------------------------------------
+# ISHGA TUSHGANDA TASHXIS (token qayerdan o'qilgani — tokenning o'zi chiqarilmaydi)
+# ------------------------------------------------------------------
+
+logger.info(
+    "Token manbasi: %s | bot ID: %s",
+    ENV_FILE if ENV_FILE else "tizim muhit o'zgaruvchisi",
+    BOT_TOKEN.split(":")[0],
+)
+if _system_token and ENV_FILE and _system_token.strip() != BOT_TOKEN:
+    logger.warning(
+        "Tizimda boshqa (eski) BOT_TOKEN o'rnatilgan edi — e'tiborsiz qoldirildi, "
+        "%s dagi token ishlatiladi.", ENV_FILE.name,
+    )
+if _BAD_ADMIN_ENTRIES:
+    logger.warning(
+        "ADMIN_IDS da raqam bo'lmagan qiymat bor: %s — admin ID faqat RAQAM bo'lishi kerak "
+        "(botga /id yozib o'z ID'ingizni bilib oling).", _BAD_ADMIN_ENTRIES,
+    )
+if not ADMIN_IDS:
+    logger.warning("ADMIN_IDS bo'sh — /broadcast hech kimga ishlamaydi.")

@@ -1,6 +1,3 @@
-
- 
-
 import asyncio
 import os
 import tempfile
@@ -211,6 +208,16 @@ async def cmd_help(message: Message) -> None:
     )
 
 
+@dp.message(Command("id"))
+async def cmd_id(message: Message) -> None:
+    """Foydalanuvchining raqamli ID'sini ko'rsatadi (.env dagi ADMIN_IDS uchun kerak)."""
+    await message.answer(
+        f"🆔 Sizning Telegram ID'ingiz: <code>{message.from_user.id}</code>\n\n"
+        "Buni .env faylidagi ADMIN_IDS= qatoriga yozing.",
+        parse_mode="HTML",
+    )
+
+
 @dp.message(Command("cancel"))
 async def cmd_cancel(message: Message) -> None:
     chat_id = message.chat.id
@@ -277,7 +284,7 @@ async def menu_music(message: Message) -> None:
 @dp.message(F.text == MENU_GALLERY)
 async def menu_gallery(message: Message) -> None:
     user_mode[message.chat.id] = "gallery"
-    await message.answer("🖼 Endi telefon/kompyuteringizdagi videoni shu yerga yuboring (fayl sifatida).")
+    await message.answer("🖼 Endi telefon/kompyuteringizdagi videoni shu yerga yuboring (oddiy video sifatida).")
 
 
 @dp.message(F.text == MENU_IMAGE_COMPRESS)
@@ -302,7 +309,7 @@ async def menu_qr(message: Message) -> None:
 async def menu_trim(message: Message) -> None:
     user_mode[message.chat.id] = "trim"
     await message.answer(
-        "✂️ Kesish uchun avval videoni (fayl sifatida) yuboring. "
+        "✂️ Kesish uchun avval videoni (oddiy video sifatida) yuboring. "
         "Keyin qaysi oralig'ini olishni so'rayman."
     )
 
@@ -319,7 +326,7 @@ async def menu_info(message: Message) -> None:
 @dp.message(F.text == MENU_QR_SCAN)
 async def menu_qr_scan(message: Message) -> None:
     user_mode[message.chat.id] = "qr_scan"
-    await message.answer("🔎 QR-kod tasvirlangan rasmni (fayl sifatida) yuboring.")
+    await message.answer("🔎 QR-kod tasvirlangan rasmni (oddiy rasm sifatida) yuboring.")
 
 
 @dp.message(F.text == MENU_RESIZE)
@@ -556,6 +563,18 @@ async def handle_uploaded_photo(message: Message) -> None:
 
     stats.record_event(event, chat_id)
     schedule_followup(bot, chat_id)
+
+
+@dp.message(F.document)
+async def handle_uploaded_document(message: Message) -> None:
+    """Fayl (document) sifatida yuborilgan rasm/video — bot faqat oddiy rasm/video
+    qabul qiladi, shuning uchun foydalanuvchiga tushuntiramiz (jim qolmaymiz)."""
+    await message.answer(
+        "📎 Bu fayl (document) sifatida yuborildi. Iltimos, rasm yoki videoni "
+        "<b>oddiy holda</b> (Galereya orqali, \"Fayl sifatida\" belgisiz) yuboring.\n"
+        "Hajmi 20 MB dan oshmasligi kerak.",
+        parse_mode="HTML",
+    )
 
 
 # ==================================================================
@@ -988,11 +1007,11 @@ async def handle_text(message: Message) -> None:
         return
 
     if mode == "gallery":
-        await message.answer("🖼 Iltimos, videoni matn emas, fayl sifatida yuboring.")
+        await message.answer("🖼 Iltimos, videoni matn emas, oddiy video sifatida yuboring.")
         return
 
     if mode == "trim":
-        await message.answer("✂️ Iltimos, avval videoni (fayl sifatida) yuboring.")
+        await message.answer("✂️ Iltimos, avval videoni (oddiy video sifatida) yuboring.")
         return
 
     if mode == "qr_scan":

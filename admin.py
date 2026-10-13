@@ -7,7 +7,7 @@ import asyncio
 import random
 
 from aiogram import Bot
-from aiogram.exceptions import TelegramAPIError, TelegramForbiddenError
+from aiogram.exceptions import TelegramAPIError, TelegramForbiddenError, TelegramRetryAfter
 
 from config import (
     ADMIN_IDS,
@@ -32,7 +32,12 @@ async def broadcast_message(bot: Bot, text: str) -> tuple[int, int]:
     success, failed = 0, 0
     for chat_id in users:
         try:
-            await bot.send_message(chat_id, text)
+            try:
+                await bot.send_message(chat_id, text)
+            except TelegramRetryAfter as e:
+                # Telegram "biroz kuting" desa — kutib, bir marta qayta urinamiz
+                await asyncio.sleep(e.retry_after + 1)
+                await bot.send_message(chat_id, text)
             success += 1
         except TelegramForbiddenError:
             # Foydalanuvchi botni bloklagan — xato hisoblanmaydi, shunchaki o'tkazib yuboriladi

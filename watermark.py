@@ -121,10 +121,12 @@ def remove_watermark(input_path: str, output_path: str, position: str, mode: str
         vf = f"drawbox=x={x}:y={y}:w={box_w}:h={box_h}:color=black@1.0:t=fill"
         cmd = ["ffmpeg", "-y", "-i", input_path, "-vf", vf, "-c:a", "copy", output_path]
     elif mode == "blur":
+        # boxblur radiusi kesilgan hududning yarmidan oshmasligi shart
+        radius = max(1, min(40, box_h // 2 - 1, box_w // 2 - 1))
         filter_complex = (
             f"[0:v]split=2[base][blur_src];"
             f"[blur_src]crop={box_w}:{box_h}:{x}:{y},"
-            f"boxblur=40:10:enable=1,boxblur=40:10:enable=1[blurred];"
+            f"boxblur={radius}:5,boxblur={radius}:5[blurred];"
             f"[base][blurred]overlay={x}:{y}[out]"
         )
         cmd = [
@@ -203,7 +205,9 @@ def trim_video(input_path: str, output_path: str, start_seconds: float, end_seco
         "-i", input_path,
         "-ss", str(start_seconds),
         "-t", str(duration),
+        "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
         "-vcodec", "libx264",
+        "-pix_fmt", "yuv420p",
         "-acodec", "aac",
         output_path,
     ]
@@ -220,11 +224,14 @@ def compress_video(input_path: str, output_path: str, crf: int) -> None:
     cmd = [
         "ffmpeg", "-y",
         "-i", input_path,
+        "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",   # libx264 juft o'lcham talab qiladi
         "-vcodec", "libx264",
+        "-pix_fmt", "yuv420p",
         "-crf", str(crf),
         "-preset", "faster",
         "-acodec", "aac",
         "-b:a", "128k",
+        "-movflags", "+faststart",
         output_path,
     ]
     result = subprocess.run(cmd, capture_output=True)
